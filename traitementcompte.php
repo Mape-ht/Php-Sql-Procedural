@@ -27,27 +27,34 @@ function getConnexion()
 function addCompteE($connexion)
 {
 
-    $requet = "INSERT INTO `compte_client`(`id`, `numerocte`, `clerib`, `agence_id`, `depot initial`, `etat`, `cltphy_id`, `cltmoral_id`, `datecrea`, `typecompte_id`, `typefrais_id`, `agio`, `interet`) VALUES (null,?,?,null,?,null,null,null,?,?,?,?,?)";
+    /*$requet = "INSERT INTO `compte_client`(`id`, `numerocte`, `clerib`, `agence_id`, `depot initial`, `etat`, `cltphy_id`, `cltmoral_id`, `datecrea`, `typecompte_id`, `typefrais_id`, `agio`, `interet`)
+    VALUES (null,?,?,null,?,null,null,null,?,?,?,?,?)";
+     
+     $preparestatement = $connexion->prepare($requet);
+     $preparestatement->execute(array('null', $_POST["numCompte"], $_POST["cle"], 'null', $_POST["initial"],'null', 'null', 'null', $_POST["dateOuv"], $_POST["typeCompte"], $_POST["typesfrais"], $_POST["agios"], $_POST["remun"]));
 
+     return $connexion->lastInsertId();*/
 
-    $preparestatement = $connexion->prepare($requet);
-    $preparestatement->execute(array($_POST["numCompte"], $_POST["cle"], $_POST["initial"], $_POST["dateOuv"], $_POST["typeCompte"], '$montantF', '$montantA', '$montantR'));
+     $requet = "INSERT INTO `compte`(`id`, `numCompte`, `clerib`, `depotInit`, `fraisOuverture`, `remun`, `agio`, `dateOuv`) VALUES (null,?,?,?,?,?,?,?)";
+     
+     $preparestatement = $connexion->prepare($requet);
+     $preparestatement->execute(array( $_POST["numCompte"], $_POST["cle"], $_POST["initial"], $_POST["typesfrais"],  $_POST["remun"], $_POST["agios"], $_POST["dateOuv"]));
 
-    $montantF=(int)'$montantF';
-    $montantA=(int)'$montantA';
-    $montantR=(int)'$montantR';
+     return $connexion->lastInsertId();
 
-    return $connexion->lastInsertId();
+     
 }
+  
 
-//add Compte courant pour salariés
+
+/*//add Compte courant pour salariés
 function addCompteC($connexion)
 {
 
     $requet = "INSERT INTO `compte_client`(`id`, `numerocte`, `clerib`, `agence_id`, `depot initial`, `etat`, `cltphy_id`, `cltmoral_id`, `datecrea`, `typecompte_id`, `typefrais_id`, `agio`, `interet`) VALUES (null,?,?,null,?,null,null,null,?,?,?,?,?)";
 
     $preparestatement = $connexion->prepare($requet);
-    $preparestatement->execute(array($_POST["numCompte"], $_POST["cle"], $_POST["initial"], $_POST["dateOuv"], '$montantF', '$montantA', '$montantR' ));
+    $preparestatement->execute(array($_POST["numCompte"], $_POST["cle"], $_POST["initial"], $_POST["dateOuv"], '$typesfrais', '$agios', '$remun' ));
 
     return $connexion->lastInsertId();
 }
@@ -61,7 +68,7 @@ function addCompteB($connexion)
     $preparestatement->execute(array($_POST["numCompte"], $_POST["cle"], $_POST["initial"], $_POST["dateOuv"], $_POST["typeCompte"], '$montantF', '$montantA', '$montantR'));
 
     return $connexion->lastInsertId();
-}
+}*/
 
 
 //==================end functions================================//
@@ -69,66 +76,57 @@ function addCompteB($connexion)
 
 //===================traitement controller===========================// 
 //traitement extraction formulaire creation compte
-if (isset($_POST['valider'])) {
-    extract($_POST);
+if (isset($_POST) && !empty($_POST)) {
     //var_dump($_POST);
     //die;
     //Extraction formulaire compte
-    if ($typeCompte == "1") {
+    $typeCompte = $_POST["typeCompte"];
+    $typesfrais = $_POST["typesfrais"];
+    $remun = $_POST["remun"];
+    $agios = $_POST["agios"];
 
-        if(($typesfrais == "1") && ($remun == "1") && ($agios == "2")){
+        if ($typeCompte == "1") {
 
-            $montantF = 25000 && $montantR = 50000 && $montantA = null;
+                
+                $connexion = getConnexion();
+                $resultat = addCompteE($connexion);
+                if ($resultat > 0) {
+                    header("Location:compte.php");
+                } else {
             
+                    echo "compte epargne non ajouté ";
+                }
+                
             }
-        
+
+            if ($typeCompte == "2"){
+            
+                $connexion = getConnexion();
+                $resultat = addCompteE($connexion);
+                if ($resultat > 0) {
+                    header("Location:compte.php");
+                } else {
+            
+                    echo "compte courant non ajouté ";
+                }
+
+        } 
+                
+        if ($typeCompte == "3"){
+            
             $connexion = getConnexion();
             $resultat = addCompteE($connexion);
-
             if ($resultat > 0) {
-                header("Location:client.php");
+                header("Location:compte.php");
             } else {
-    
-            echo "compte epargne et xewel non ajouté ";
-        }
-    } else {
-
-        echo "les frais ne correspondent pas";
-    }
-
         
-    }
-       /* if ($typeCompte == "2") 
-            $typesfrais == 2;
-            $agios == 1;
+                echo "compte bloqué non ajouté ";
+            }
+    } 
 
-            $montantF = null;
-            $montantR = null;
-            $montantA = 6000;
-
-            $connexion = getConnexion();
-            $resultat = addCompteC($connexion);
-        } else {
-
-            echo "compte courant non ajouté ";
-        }
-    }
-    if ($typeCompte == "3") {
-
-        $remun == 2;
-        $montantF = 50000;
-        $montantR = 100000;
-        $montantA = null;
-
-        $connexion = getConnexion();
-        $resultat = addCompteB($connexion);
-    } else {
-
-        echo "compte bloqué non ajouté ";
-    }*/
-
-
-
+        } 
+        
+   
 //====================end controller==================================//
 
 ?>

@@ -27,7 +27,7 @@
             </ul>
         </aside>
         <section class="Compte">
-            <form id="creacompteForm" method="POST" action="traitementcompte.php" onsubmit="return comptevalidate()">
+            <form id="creacompteForm" method="POST" action="traitementcompte.php" onchange="showCompteEpargne()">
                 <!--action="connectcpte.php" method="POST">-->
                 <fieldset>
                     <legend>Creation Compte</legend>
@@ -50,26 +50,34 @@
                         <label for="initial">Depôt initial </label>
                         <input type="texte" id="initial" name="initial" placeholder="Depôt initial" /><br />
                     </div>
-                    <div>
-                        <label for="typesfrais">Frais Bancaire</label>
-                        <select name="typesfrais" id="typesfrais">
-                            <option value="0">--Ouverture Compte--</option>
+                    <!--<div id="ouverture" >-->
+                        <label for="typesfrais">Frais Ouverture</label>
+                        <!--<select name="typesfrais" id="typesfrais">
+                            <option value="0">--Frais Ouverture --</option>
                             <option value="1">Epargne et Xewel</option>
                             <option value="2">Compte Bloqué</option>
-                    </select><br><br />
+                        </select><br><br />-->
+                        <input type="text" name="typesfrais" id="typesfrais"/><br></br>
+                    <!--<div id="interetB" >
                     <label for="remun">Remuneration</label>
                     <select name="remun" id="remun">
                         <option value="0">--Remuneration Compte--</option>
                         <option value="1">Epargne et Xewel</option>
                         <option value="2">Compte Bloqué</option>
                     </select><br></br>
+                    </div>-->
+                    <label for="remun">Remuneration</label>
+                    <input type="text" name="remun" id="remun"/><br></br>
+                    <!--<div id="ag">
                     <label for="agios">Agios</label>
                     <select name="agios" id="agios">
                         <option value="0">--Agios Compte--</option>
                         <option value="1">Compte Courant</option>
                         <option value="2">Autre</option>
                     </select><br></br>
-                    </div>
+                    </div>-->
+                    <label for="agios">Agios</label>
+                    <input type="text" name="agios" id="agios"/><br></br>
                     <label for="dateOuv">Date d'ouverture du compte</label>
                     <input id="dateOuv" type="date" name="dateOuv" /><br />
                 </fieldset>
@@ -80,7 +88,7 @@
             </form>
         </section>
     </main>
-    <script src="./js/creaclt.js">
+    <!--<script src="./banqueDuPeupleRendu/js/compte.js">-->
     </script>
 </body>
 </html>
